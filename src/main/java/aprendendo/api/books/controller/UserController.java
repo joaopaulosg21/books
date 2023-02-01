@@ -1,5 +1,6 @@
 package aprendendo.api.books.controller;
 
+import aprendendo.api.books.model.DTO.LoginDTO;
 import aprendendo.api.books.model.DTO.UserDTO;
 import aprendendo.api.books.model.User;
 import aprendendo.api.books.service.UserService;
@@ -24,5 +25,10 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDTO> createUser(@Valid @RequestBody User user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@Valid @RequestBody LoginDTO loginDTO) {
+        return ResponseEntity.ok(userService.login(loginDTO));
     }
 }
