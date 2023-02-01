@@ -1,5 +1,6 @@
 package aprendendo.api.books.model;
 
+import aprendendo.api.books.model.DTO.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,5 +58,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UserDTO toDTO() {
+        return new UserDTO(id,name,email);
     }
 }
