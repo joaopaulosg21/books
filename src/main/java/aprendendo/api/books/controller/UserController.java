@@ -1,15 +1,14 @@
 package aprendendo.api.books.controller;
 
 import aprendendo.api.books.model.DTO.LoginDTO;
+import aprendendo.api.books.model.DTO.TokenDTO;
 import aprendendo.api.books.model.DTO.UserDTO;
 import aprendendo.api.books.model.User;
 import aprendendo.api.books.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -28,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@Valid @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<TokenDTO> login(@Valid @RequestBody LoginDTO loginDTO) {
         return ResponseEntity.ok(userService.login(loginDTO));
     }
 }

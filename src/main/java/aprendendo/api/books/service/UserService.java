@@ -1,6 +1,8 @@
 package aprendendo.api.books.service;
 
+import aprendendo.api.books.auth.TokenService;
 import aprendendo.api.books.model.DTO.LoginDTO;
+import aprendendo.api.books.model.DTO.TokenDTO;
 import aprendendo.api.books.model.DTO.UserDTO;
 import aprendendo.api.books.model.User;
 import aprendendo.api.books.repository.UserRepository;
@@ -19,9 +21,12 @@ public class UserService {
 
     private final AuthenticationManager authenticationManager;
 
-    public UserService(UserRepository userRepository,AuthenticationManager authenticationManager) {
+    private final TokenService tokenService;
+
+    public UserService(UserRepository userRepository,AuthenticationManager authenticationManager,TokenService tokenService) {
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
     }
 
     public UserDTO createUser(User user) {
@@ -34,9 +39,10 @@ public class UserService {
         throw new RuntimeException("Email ja está em uso");
     }
 
-    public Object login(LoginDTO loginDTO){
+    public TokenDTO login(LoginDTO loginDTO){
         UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword());
         Authentication authentication = authenticationManager.authenticate(usernamePassword);
-        return authentication.getPrincipal();
+        String token = tokenService.generate(authentication);
+        return TokenDTO.builder().type("Bearer").token(token).build();
     }
 }
