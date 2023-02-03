@@ -1,5 +1,6 @@
 package aprendendo.api.books.model;
 
+import aprendendo.api.books.enums.Status;
 import aprendendo.api.books.model.DTO.BookDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,7 +24,7 @@ public class Book {
     @NotBlank(message="Author não pode ser null")
     private String author;
 
-    private String status;
+    private Status status;
 
     @ManyToOne
     @JoinColumn(referencedColumnName = "id",columnDefinition = "user_id")

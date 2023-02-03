@@ -1,5 +1,6 @@
 package aprendendo.api.books.model.DTO;
 
+import aprendendo.api.books.enums.Status;
 import aprendendo.api.books.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class BookDTO {
 
     private String author;
 
-    private String status;
+    private Status status;
 
     private User user;
 

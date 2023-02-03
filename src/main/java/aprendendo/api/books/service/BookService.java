@@ -1,5 +1,6 @@
 package aprendendo.api.books.service;
 
+import aprendendo.api.books.enums.Status;
 import aprendendo.api.books.model.Book;
 import aprendendo.api.books.model.DTO.BookDTO;
 import aprendendo.api.books.model.DTO.UserDTO;
@@ -23,7 +24,7 @@ public class BookService {
     public BookDTO addBook(Book book, UserDTO userDTO) {
         User user = userRepository.findById(userDTO.getId()).get();
         book.setUser(user);
-        book.setStatus("Não lido");
+        book.setStatus(Status.NAO_LIDO);
         return bookRepository.save(book).toDTO();
     }
 }
