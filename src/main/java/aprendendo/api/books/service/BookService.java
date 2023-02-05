@@ -7,6 +7,9 @@ import aprendendo.api.books.model.DTO.UserDTO;
 import aprendendo.api.books.model.User;
 import aprendendo.api.books.repository.BookRepository;
 import aprendendo.api.books.repository.UserRepository;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,5 +29,10 @@ public class BookService {
         book.setUser(user);
         book.setStatus(Status.NAO_LIDO);
         return bookRepository.save(book).toDTO();
+    }
+
+    public List<BookDTO> allBooks(UserDTO userDTO) {
+        List<Book> books = bookRepository.findAllByUserId(userDTO.getId());
+        return books.stream().map((book) -> book.toDTO()).toList();
     }
 }
