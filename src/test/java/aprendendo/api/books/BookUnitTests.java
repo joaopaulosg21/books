@@ -4,6 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
@@ -48,7 +50,10 @@ public class BookUnitTests {
 
         when(bookRepository.save(any(Book.class))).thenReturn(book);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
-
+        
+        List<Book> books = new ArrayList<>();
+        books.add(book);
+        when(bookRepository.findAllByUserId(user.getId())).thenReturn(books);
     }
 
     @Test
@@ -57,6 +62,15 @@ public class BookUnitTests {
         BookDTO bookDTO = bookService.addBook(book, user.toDTO());
 
         Assertions.assertEquals(book.getId(), bookDTO.getId());
-        Assertions.assertEquals(book.getUser().getEmail(), bookDTO.getUser().getEmail());
+        Assertions.assertEquals(user.getEmail(), bookDTO.getUser().getEmail());
+    }
+
+    @Test
+    public void allBooksTest() {
+        
+        List<BookDTO> booksDTO = bookService.allBooks(user.toDTO());
+
+        Assertions.assertEquals(book.getId(), booksDTO.get(0).getId());
+        Assertions.assertEquals(user.getId(), booksDTO.get(0).getUser().getId());
     }
 }
