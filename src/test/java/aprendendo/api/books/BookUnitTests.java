@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
+import aprendendo.api.books.enums.Status;
 import aprendendo.api.books.model.Book;
 import aprendendo.api.books.model.User;
 import aprendendo.api.books.model.DTO.BookDTO;
@@ -54,6 +55,7 @@ public class BookUnitTests {
         List<Book> books = new ArrayList<>();
         books.add(book);
         when(bookRepository.findAllByUserId(user.getId())).thenReturn(books);
+        when(bookRepository.findByIdAndUserId(anyLong(), anyLong())).thenReturn(Optional.of(book));
     }
 
     @Test
@@ -72,5 +74,12 @@ public class BookUnitTests {
 
         Assertions.assertEquals(book.getId(), booksDTO.get(0).getId());
         Assertions.assertEquals(user.getId(), booksDTO.get(0).getUser().getId());
+    }
+
+    @Test
+    public void changeStatusTest() {
+        BookDTO bookDTO = bookService.changeStatus(1, user.toDTO());
+
+        Assertions.assertEquals(Status.LIDO, bookDTO.getStatus());
     }
 }

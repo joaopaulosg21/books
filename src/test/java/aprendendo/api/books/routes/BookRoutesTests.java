@@ -13,6 +13,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import aprendendo.api.books.enums.Status;
 import aprendendo.api.books.model.Book;
 import aprendendo.api.books.model.DTO.BookDTO;
 import aprendendo.api.books.model.DTO.LoginDTO;
@@ -28,6 +29,8 @@ public class BookRoutesTests {
 
     private HttpHeaders headers;
 
+    private Book book;
+
     @BeforeEach
     public void setup() {
         LoginDTO loginDTO = new LoginDTO("usertestroute@email.com","123");
@@ -39,7 +42,7 @@ public class BookRoutesTests {
     @Test
     public void addBookRouteTest() {
 
-        Book book = new Book();
+        book = new Book();
         book.setTitle("Test title");
         book.setAuthor("Test author");
 
@@ -61,5 +64,22 @@ public class BookRoutesTests {
         
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals("usertestroute@email.com", response.getBody()[0].getUser().getEmail());
+    }
+
+    @Test
+    public void changeStatusRouteTest() {
+
+        book = new Book();
+        book.setTitle("Test title for change status test");
+        book.setAuthor("Test author for change status test");
+
+        HttpEntity<Book> bookEntity = new HttpEntity<>(book,headers);
+        ResponseEntity<BookDTO> bookResponse = restTemplate.exchange("/books",HttpMethod.POST,bookEntity,BookDTO.class);
+
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        ResponseEntity<BookDTO> response = restTemplate.exchange("/books/status/change/" + bookResponse.getBody().getId(),HttpMethod.PUT,entity,BookDTO.class);
+        
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(Status.LIDO, response.getBody().getStatus());
     }
 }

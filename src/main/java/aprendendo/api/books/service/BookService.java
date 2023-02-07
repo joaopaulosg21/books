@@ -9,6 +9,7 @@ import aprendendo.api.books.repository.BookRepository;
 import aprendendo.api.books.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -35,4 +36,16 @@ public class BookService {
         List<Book> books = bookRepository.findAllByUserId(userDTO.getId());
         return books.stream().map((book) -> book.toDTO()).toList();
     }
-}
+
+    public BookDTO changeStatus(long id, UserDTO userDTO) {
+        Optional<Book> optionalBook = bookRepository.findByIdAndUserId(id, userDTO.getId());
+        if(optionalBook.isPresent()) {
+            Book book = optionalBook.get();
+            book.setStatus(Status.LIDO);
+            
+            return bookRepository.save(book).toDTO();
+        } 
+        
+        throw new RuntimeException("Book com esse id não existe");
+    }
+} 
