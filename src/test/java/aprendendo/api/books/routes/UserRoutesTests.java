@@ -24,7 +24,7 @@ public class UserRoutesTests {
     public void addUserRouteTest() {
         User user = new User();
         user.setName("User test route");
-        user.setEmail("usertestroute@email.com");
+        user.setEmail("usertestroute" + ((int)(Math.random()*100)) + "@email.com");
         user.setPassword("123");
         
         ResponseEntity<UserDTO> response = restTemplate.postForEntity("/users", user, UserDTO.class);
